@@ -28,6 +28,24 @@ backfill: ## 5y daily history -> Parquet (TICKERS="NVDA MSFT" optional)
 signals: ## recompute indicators / breadth / regime
 	$(PY) python manage.py signals
 
+refresh: ## live keyless pull (quotes/Kalshi/RSS/EDGAR) + recompute; never fatal
+	$(PY) python manage.py refresh
+
+backfill-regime: ## recompute the 2y composite regime over keyless history (YEARS=2)
+	$(PY) python manage.py backfill-regime --years $(or $(YEARS),2)
+
+backtest-rules: ## Brier-score the systematic rulebook over history
+	$(PY) python manage.py backtest-rules
+
+demo: ## migrate + boot the daemon on the committed snapshot (no network)
+	$(PY) python manage.py migrate
+	MERIDIAN_PORT=$(PORT) $(PY) meridiand
+
+live: ## live keyless refresh, then boot the daemon showing current data
+	$(PY) python manage.py migrate
+	$(PY) python manage.py refresh
+	MERIDIAN_PORT=$(PORT) $(PY) meridiand
+
 brief-now: ## generate a brief now (KIND=morning|closing|sunday|...)
 	$(PY) python manage.py brief-now $(KIND)
 
@@ -61,4 +79,4 @@ deploy: ## git pull -> deps -> migrate -> build web -> restart daemon
 	$(MAKE) build-web
 	launchctl kickstart -k gui/$$(id -u)/com.meridian.daemon || true
 
-.PHONY: help setup dev run migrate seed backfill signals brief-now test lint fix build-web install-launchd deploy
+.PHONY: help setup dev run migrate seed backfill signals refresh backfill-regime backtest-rules demo live brief-now test lint fix build-web install-launchd deploy

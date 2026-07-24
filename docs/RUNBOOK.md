@@ -57,6 +57,13 @@ python manage.py ingest crypto      # run one connector now (prices futures cryp
 # --- signals ---
 python manage.py signals            # recompute indicators + breadth + regime
 
+# --- live desk & retrospective validation (V2, all keyless) ---
+python manage.py refresh            # live pull: quotes + Kalshi + RSS + EDGAR; per-connector
+                                    #   summary; partial failures never crash. --dry-run previews.
+python manage.py backfill-regime --years 2   # recompute the 2y composite regime -> regime_history
+python manage.py backtest-rules     # Brier-score config/rules.yaml over history -> rule_predictions
+# make demo  = migrate + boot on the committed snapshot;  make live = refresh + boot
+
 # --- briefs ---
 python manage.py brief-now morning  # morning|midday|closing|sunday|crypto|event_flash
 
