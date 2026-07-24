@@ -3,13 +3,15 @@ import { NavLink, Route, Routes, useLocation } from "react-router-dom";
 import { useSSE } from "./lib/sse";
 import { CommandPalette } from "./components/CommandPalette";
 import {
-  IconBriefs, IconConviction, IconFilings, IconJournal, IconMacro, IconMarkets,
-  IconMoon, IconSignals, IconSun, IconSystem, IconToday,
+  IconBriefs, IconConviction, IconFilings, IconJournal, IconLab, IconMacro, IconMarkets,
+  IconMoon, IconRegime, IconSignals, IconSun, IconSystem, IconToday,
 } from "./components/icons";
 import Today from "./pages/Today";
 import Markets from "./pages/Markets";
 import MarketDetail from "./pages/MarketDetail";
 import Signals from "./pages/Signals";
+import Regime from "./pages/Regime";
+import CalibrationLab from "./pages/CalibrationLab";
 import Macro from "./pages/Macro";
 import Filings from "./pages/Filings";
 import Briefs from "./pages/Briefs";
@@ -21,8 +23,9 @@ import Design from "./pages/Design";
 
 const NAV: [string, string, any][] = [
   ["/", "Today", IconToday], ["/markets", "Markets", IconMarkets], ["/signals", "Signals", IconSignals],
-  ["/macro", "Macro", IconMacro], ["/filings", "Filings", IconFilings], ["/briefs", "Briefs", IconBriefs],
-  ["/conviction", "Conviction", IconConviction], ["/journal", "Journal", IconJournal], ["/system", "System", IconSystem],
+  ["/regime", "Regime", IconRegime], ["/macro", "Macro", IconMacro], ["/filings", "Filings", IconFilings],
+  ["/briefs", "Briefs", IconBriefs], ["/conviction", "Conviction", IconConviction],
+  ["/calibration", "Calibration Lab", IconLab], ["/journal", "Journal", IconJournal], ["/system", "System", IconSystem],
 ];
 
 function useTheme(): [string, () => void] {
@@ -77,6 +80,8 @@ export default function App() {
           <Route path="/markets" element={<Markets />} />
           <Route path="/markets/:ticker" element={<MarketDetail />} />
           <Route path="/signals" element={<Signals />} />
+          <Route path="/regime" element={<Regime />} />
+          <Route path="/calibration" element={<CalibrationLab />} />
           <Route path="/macro" element={<Macro />} />
           <Route path="/filings" element={<Filings />} />
           <Route path="/briefs" element={<Briefs />} />

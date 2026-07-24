@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { endpoints } from "../lib/api";
 import { Card, Delta, Badge, Loading } from "../components/ui";
 import { RegimeGauge } from "../components/RegimeGauge";
 import { BriefMarkdown } from "../components/BriefMarkdown";
-import { fmtPrice, fmtTime, ago } from "../lib/format";
+import { fmtPrice, fmtTime, fmtDate, ago } from "../lib/format";
 
 const SNAPSHOT = ["SPY", "QQQ", "^TNX", "^VIX", "BTC-USD"];
 
@@ -26,6 +27,9 @@ export default function Today() {
         <h1 className="large-title">Today</h1>
         <div className="subhead sec-label">{new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}</div>
       </header>
+
+      <FreshnessBanner />
+      <IntroCard />
 
       {/* Market snapshot strip */}
       <div className="xscroll">
@@ -99,3 +103,51 @@ export default function Today() {
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const truncate = (md: string) => md.split("\n").slice(0, 40).join("\n");
 const Empty = ({ text }: { text: string }) => <div className="footnote sec-label" style={{ padding: "12px 0" }}>{text}</div>;
+
+// Snapshot vs live freshness — honest, self-explaining (V2 WS1).
+function FreshnessBanner() {
+  const f = useQuery({ queryKey: ["freshness"], queryFn: endpoints.freshness, refetchInterval: 60_000 });
+  if (!f.data) return null;
+  const live = f.data.mode === "live";
+  const ts = live ? f.data.last_refresh : f.data.snapshot_ts;
+  return (
+    <div className="material" style={{
+      display: "flex", alignItems: "center", gap: 10, padding: "9px 14px",
+      borderRadius: "var(--radius-pill)", border: "var(--hairline) solid var(--separator)",
+      fontSize: "var(--t-footnote)",
+    }}>
+      <span style={{ color: live ? "var(--green)" : "var(--orange)", fontSize: 10 }}>●</span>
+      {live ? (
+        <span><strong>Live</strong> as of {fmtTime(ts)}</span>
+      ) : (
+        <span className="sec-label">
+          <strong style={{ color: "var(--label)" }}>Snapshot: {fmtDate(ts)}</strong>
+          {" — run "}<code style={{ fontFamily: "var(--font-mono)", fontSize: 12 }}>python manage.py refresh</code>{" for live data"}
+        </span>
+      )}
+    </div>
+  );
+}
+
+// First-run "what am I looking at" card, dismissible (V2 WS4).
+function IntroCard() {
+  const [seen, setSeen] = useState(() => localStorage.getItem("intro-seen") === "1");
+  if (seen) return null;
+  const dismiss = () => { localStorage.setItem("intro-seen", "1"); setSeen(true); };
+  return (
+    <div className="card" style={{ borderLeft: "3px solid var(--blue)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", gap: 12 }}>
+        <div>
+          <div className="headline" style={{ marginBottom: 4 }}>Welcome to the desk</div>
+          <div className="footnote sec-label" style={{ lineHeight: 1.55, maxWidth: 640 }}>
+            This is a keyless market-intel dashboard. <strong>Today</strong> is your morning read.{" "}
+            <strong>Regime</strong> shows a composite risk model validated over two years of history;{" "}
+            <strong>Calibration Lab</strong> Brier-scores systematic rules retrospectively. Everything on
+            screen is computed from committed or clearly-labelled live data — nothing is fabricated.
+          </div>
+        </div>
+        <button className="segmented" style={{ padding: "5px 12px", flex: "none" }} onClick={dismiss}>Got it</button>
+      </div>
+    </div>
+  );
+}

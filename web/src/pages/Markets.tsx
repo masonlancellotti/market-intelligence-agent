@@ -23,8 +23,15 @@ export default function Markets() {
 
   return (
     <div style={{ display: "grid", gap: 18 }}>
-      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-        <h1 className="large-title">Markets</h1>
+      <header style={{ display: "flex", alignItems: "start", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ maxWidth: "58ch" }}>
+          <h1 className="large-title" style={{ textWrap: "balance" }}>Markets</h1>
+          <div className="subhead sec-label" style={{ textWrap: "pretty", marginTop: 2 }}>
+            Every instrument the desk tracks, grouped by how closely it's watched — from
+            <strong style={{ color: "var(--label)" }}> Holdings</strong> (owned) through
+            <strong style={{ color: "var(--label)" }}> Benchmarks</strong> (market yardsticks). Tap any row for its chart.
+          </div>
+        </div>
         <Segmented options={["All", "holding", "active", "monitor", "benchmark"]} value={filter} onChange={setFilter} />
       </header>
 

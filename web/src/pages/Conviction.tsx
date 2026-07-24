@@ -16,9 +16,13 @@ export default function Conviction() {
 
   return (
     <div style={{ display: "grid", gap: 18 }}>
-      <header>
-        <h1 className="large-title">Conviction</h1>
-        <div className="subhead sec-label">No position without a memo. The memo, not the mood, is what gets reviewed.</div>
+      <header style={{ maxWidth: "70ch" }}>
+        <h1 className="large-title" style={{ textWrap: "balance" }}>Conviction desk</h1>
+        <div className="subhead sec-label" style={{ textWrap: "pretty", marginTop: 2 }}>
+          Every trade idea is a written <strong style={{ color: "var(--label)" }}>memo</strong> that moves left-to-right —
+          from <strong style={{ color: "var(--label)" }}>Research</strong> to <strong style={{ color: "var(--label)" }}>Live</strong> —
+          only after it clears a 10-point conviction score and a devil's-advocate review. The memo, not the mood, is what gets graded.
+        </div>
       </header>
 
       {isLoading ? <Loading rows={4} /> : (

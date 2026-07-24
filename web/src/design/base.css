@@ -118,3 +118,66 @@ table.grid tr:hover td { background: var(--fill); }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 button { font-family: inherit; }
 a { color: inherit; text-decoration: none; }
+
+/* ---- V2 research surfaces (Regime · Calibration Lab) ---- */
+
+/* plain-language "what you're looking at" lead strip */
+.takeaway { display: flex; gap: 12px; align-items: flex-start;
+  padding: 15px 18px; border-radius: var(--radius-card);
+  background: color-mix(in srgb, var(--blue) 7%, var(--secondarySystemBackground));
+  border: var(--hairline) solid color-mix(in srgb, var(--blue) 22%, var(--separator)); }
+.takeaway .lede { font-size: var(--t-callout); line-height: 1.5; text-wrap: pretty; max-width: 68ch; }
+.takeaway .lede strong { font-weight: 640; }
+.takeaway .mark { flex: none; width: 22px; height: 22px; border-radius: 7px; margin-top: 1px;
+  display: grid; place-items: center; background: var(--blue); color: #fff; font-size: 13px; font-weight: 700; }
+
+/* retrospective pill — human-readable, prominent, not shouty */
+.retro-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+  border-radius: var(--radius-pill); font-size: var(--t-caption1); font-weight: 600; letter-spacing: 0.02em;
+  color: var(--secondaryLabel); background: var(--fill); border: var(--hairline) solid var(--separator); }
+.retro-pill::before { content: "↩"; font-size: 12px; }
+
+/* inline info affordance: circled i with a plain-language popover on hover/focus */
+.info-wrap { position: relative; display: inline-flex; vertical-align: middle; margin-left: 5px; cursor: help; }
+.info-i { width: 14px; height: 14px; border-radius: 50%; display: grid; place-items: center;
+  font-size: 10px; font-weight: 700; font-style: normal; color: var(--secondaryLabel);
+  border: 1.2px solid var(--separator); font-family: var(--font-text); line-height: 1; }
+.info-wrap:hover .info-i, .info-wrap:focus-visible .info-i { color: var(--blue); border-color: var(--blue); }
+.info-pop { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%) translateY(3px);
+  width: max-content; max-width: 260px; padding: 8px 11px; border-radius: 9px; z-index: 30;
+  background: var(--tertiarySystemBackground); border: var(--hairline) solid var(--separator);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.16); color: var(--label);
+  font-size: var(--t-footnote); line-height: 1.42; text-align: left; white-space: normal; text-wrap: pretty;
+  opacity: 0; visibility: hidden; transition: opacity 160ms ease-out, transform 160ms ease-out; pointer-events: none; }
+.info-wrap:hover .info-pop, .info-wrap:focus-within .info-pop { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+
+/* dense stat/metric tables shared by the research pages */
+.lab-table { width: 100%; border-collapse: collapse; font-size: var(--t-subhead); }
+.lab-table th { text-align: right; font-weight: 590; color: var(--secondaryLabel);
+  padding: 7px 8px; border-bottom: var(--hairline) solid var(--separator);
+  font-size: var(--t-caption1); text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; }
+.lab-table th:first-child, .lab-table td:first-child { text-align: left; }
+.lab-table td { text-align: right; padding: 8px; border-bottom: var(--hairline) solid var(--separator);
+  font-variant-numeric: tabular-nums; }
+.lab-table tbody tr:last-child td { border-bottom: none; }
+.rule-row { transition: background 140ms ease-out; }
+.rule-row:hover { background: var(--fill); }
+.rule-row td:first-child::before { content: "›"; color: var(--tertiaryLabel); margin-right: 6px;
+  display: inline-block; transition: transform 140ms ease-out; }
+.rule-row.open td:first-child::before { transform: rotate(90deg); }
+.rule-detail td { background: var(--secondarySystemBackground); }
+.mono-id { font-family: var(--font-mono); font-size: var(--t-caption1); }
+.lab-code { font-family: var(--font-mono); font-size: 11.5px; background: var(--fill); padding: 1px 5px; border-radius: 4px; }
+
+/* chart hover tooltip */
+.chart-tip { position: absolute; top: 2px; transform: translateX(-50%); pointer-events: none;
+  background: var(--tertiarySystemBackground); border: var(--hairline) solid var(--separator);
+  border-radius: 8px; padding: 5px 9px; white-space: nowrap; box-shadow: 0 4px 14px rgba(0,0,0,0.14); z-index: 5; }
+
+/* legend chips */
+.legend-chip { display: inline-flex; align-items: center; gap: 5px; }
+.legend-sw { width: 10px; height: 10px; border-radius: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

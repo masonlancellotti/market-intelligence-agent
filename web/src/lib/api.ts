@@ -95,7 +95,44 @@ export const endpoints = {
   memo: (id: number) => api<{ memo: Memo }>(`/memos/${id}`),
   journal: () => api<{ entries: JournalEntry[]; calibration: Calibration }>("/journal"),
   calibration: () => api<Calibration>("/calibration"),
+  // V2 — retrospective research surfaces + live freshness
+  regimeBackfill: () => api<RegimeBackfillResp>("/regime/history"),
+  regimeForward: () => api<ForwardReturns>("/regime/forward-returns"),
+  ruleCalibration: () => api<RuleCalibration>("/calibration/rules"),
+  freshness: () => api<Freshness>("/system/freshness"),
 };
+
+// ---- V2 payload types ----
+export interface RegimeDay {
+  date: string; score: number; bucket: string; coverage: number | null;
+  components: Record<string, number>; spy_close: number | null;
+  fwd_5d: number | null; fwd_20d: number | null;
+}
+export interface RegimeBackfillResp { history: RegimeDay[]; retrospective: boolean; }
+export interface Dist { n: number; mean?: number; median?: number; p25?: number; p75?: number; pct_positive?: number; }
+export interface ForwardReturns {
+  by_bucket: Record<string, { h5: Dist; h20: Dist }>;
+  overall: { h5: Dist; h20: Dist };
+  n_days: number; caveat: string;
+}
+export interface ReliabilityPoint { bucket: string; n: number; predicted: number; realized: number; }
+export interface Skill {
+  n: number; mean_prob?: number; mean_brier?: number; base_rate?: number;
+  base_brier?: number; skill_score?: number | null;
+}
+export interface RuleStat extends Skill {
+  rule_id: string; when?: string; predict?: string; horizon?: number;
+  rationale?: string; reliability: ReliabilityPoint[];
+}
+export interface RuleCalibration {
+  pooled: Skill & { reliability: ReliabilityPoint[] };
+  by_rule: RuleStat[]; n_rules: number; label: string;
+}
+export interface Freshness {
+  last_refresh: string | null; last_refresh_ok: boolean | null;
+  connectors: { connector: string; ok: boolean; status: string }[];
+  snapshot_ts: string | null; mode: "live" | "snapshot";
+}
 
 export interface Memo {
   id: number; ticker: string; direction: string; status: string; thesis: string;

@@ -113,3 +113,21 @@ export function Loading({ rows = 3 }: { rows?: number }) {
   return <div style={{ display: "grid", gap: 8 }}>{Array.from({ length: rows }).map((_, i) => (
     <div key={i} className="skeleton" style={{ height: 44 }} />))}</div>;
 }
+
+// Inline "circled-i" that reveals a plain-language explanation on hover/focus.
+// Decodes jargon in place so a non-technical reader never has to look anything up.
+export function Info({ text, label }: { text: string; label?: string }) {
+  return (
+    <span className="info-wrap" tabIndex={0} role="note" aria-label={`${label ? label + ": " : ""}${text}`}>
+      <span className="info-i" aria-hidden="true">i</span>
+      <span className="info-pop" role="tooltip">{text}</span>
+    </span>
+  );
+}
+
+// Human-readable "this describes the past" pill with its own decode-on-hover.
+export function RetroPill({ text = "These panels describe what already happened in the historical data — they are not predictions or trading signals." }: { text?: string }) {
+  return (
+    <span className="retro-pill">Retrospective<Info text={text} label="Retrospective" /></span>
+  );
+}

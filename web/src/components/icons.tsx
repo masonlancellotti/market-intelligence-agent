@@ -18,3 +18,5 @@ export const IconBolt = (p: any) => <S {...p}><path d="M13 2L4 14h7l-1 8 9-12h-7
 export const IconSun = (p: any) => <S {...p}><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" /></S>;
 export const IconMoon = (p: any) => <S {...p}><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></S>;
 export const IconDot = (p: any) => <svg className="icon" viewBox="0 0 24 24" {...p}><circle cx="12" cy="12" r="5" fill="currentColor" /></svg>;
+export const IconRegime = (p: any) => <S {...p}><path d="M3 15c3 0 3-6 6-6s3 8 6 8 3-9 6-9" /><path d="M3 20h18" /></S>;
+export const IconLab = (p: any) => <S {...p}><path d="M9 3v6l-5 8a2 2 0 0 0 1.7 3h12.6A2 2 0 0 0 20 17l-5-8V3" /><path d="M8 3h8M8 13h8" /></S>;
