@@ -1,0 +1,120 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* Minimal reset atop Tailwind preflight */
+* { -webkit-tap-highlight-color: transparent; }
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  background: var(--groupedBackground);
+  color: var(--label);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* All numerics tabular (§13.1 — non-negotiable for a terminal) */
+.tnum, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* ---- Typography helpers ---- */
+.large-title { font-size: var(--t-large-title); line-height: var(--lh-large-title); font-weight: 700; letter-spacing: -0.02em; }
+.title1 { font-size: var(--t-title1); line-height: var(--lh-title1); font-weight: 700; letter-spacing: -0.02em; }
+.title2 { font-size: var(--t-title2); line-height: var(--lh-title2); font-weight: 700; letter-spacing: -0.01em; }
+.title3 { font-size: var(--t-title3); line-height: var(--lh-title3); font-weight: 600; }
+.headline { font-size: var(--t-headline); line-height: var(--lh-headline); font-weight: 600; }
+.callout { font-size: var(--t-callout); line-height: var(--lh-callout); }
+.subhead { font-size: var(--t-subhead); line-height: var(--lh-subhead); }
+.footnote { font-size: var(--t-footnote); line-height: var(--lh-footnote); }
+.caption { font-size: var(--t-caption1); line-height: var(--lh-caption1); }
+.sec-label { color: var(--secondaryLabel); }
+.ter-label { color: var(--tertiaryLabel); }
+
+.up { color: var(--green); }
+.down { color: var(--red); }
+.accent { color: var(--blue); }
+
+/* ---- Card ---- */
+.card {
+  background: var(--secondarySystemBackground);
+  border-radius: var(--radius-card);
+  box-shadow: var(--card-shadow);
+  padding: 16px;
+}
+.card-hero { border-radius: var(--radius-hero); padding: 20px; }
+.hairline { border-bottom: var(--hairline) solid var(--separator); }
+
+/* ---- Sidebar / chrome (translucent material) ---- */
+.material {
+  background: var(--toolbar-bg);
+  backdrop-filter: blur(var(--blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 10px; border-radius: 8px; color: var(--label);
+  font-size: var(--t-subhead); font-weight: 500; cursor: pointer;
+  transition: background var(--dur) var(--ease-spring);
+}
+.sidebar-item:hover { background: var(--fill); }
+.sidebar-item.active { background: var(--blue); color: #fff; }
+.sidebar-item.active .icon { color: #fff; }
+.icon { width: 20px; height: 20px; color: var(--secondaryLabel); flex: none; }
+
+/* ---- Segmented control (pill, animated thumb) ---- */
+.segmented { display: inline-flex; background: var(--fill); border-radius: 9px; padding: 2px; position: relative; }
+.segmented button {
+  position: relative; z-index: 1; border: 0; background: transparent; cursor: pointer;
+  font-size: var(--t-footnote); font-weight: 600; color: var(--label);
+  padding: 4px 12px; border-radius: 7px; font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+}
+.segmented .thumb {
+  position: absolute; top: 2px; bottom: 2px; border-radius: 7px;
+  background: var(--tertiarySystemBackground); box-shadow: var(--card-shadow);
+  transition: transform var(--dur) var(--ease-spring), width var(--dur) var(--ease-spring);
+}
+
+/* ---- Priority badges ---- */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 1px 7px; border-radius: var(--radius-pill);
+  font-size: var(--t-caption2); font-weight: 700; letter-spacing: 0.02em; }
+.badge-p0 { background: color-mix(in srgb, var(--red) 18%, transparent); color: var(--red); }
+.badge-p1 { background: color-mix(in srgb, var(--orange) 18%, transparent); color: var(--orange); }
+.badge-p2 { background: var(--fill); color: var(--secondaryLabel); }
+.badge-green { background: color-mix(in srgb, var(--green) 18%, transparent); color: var(--green); }
+.badge-blue { background: color-mix(in srgb, var(--blue) 18%, transparent); color: var(--blue); }
+
+/* delta pill (Stocks-app style) */
+.delta { display: inline-flex; padding: 2px 8px; border-radius: 6px; font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums; font-weight: 600; font-size: var(--t-subhead); }
+.delta.up { background: color-mix(in srgb, var(--green) 16%, transparent); }
+.delta.down { background: color-mix(in srgb, var(--red) 16%, transparent); }
+
+/* tick flash */
+@keyframes flashUp { from { color: var(--green); } to { color: var(--label); } }
+@keyframes flashDown { from { color: var(--red); } to { color: var(--label); } }
+.flash-up { animation: flashUp 600ms var(--ease-spring); }
+.flash-down { animation: flashDown 600ms var(--ease-spring); }
+
+/* table */
+table.grid { width: 100%; border-collapse: collapse; }
+table.grid th { text-align: left; font-size: var(--t-caption1); font-weight: 600; color: var(--secondaryLabel);
+  padding: 6px 10px; position: sticky; top: 0; }
+table.grid td { padding: 9px 10px; border-top: var(--hairline) solid var(--separator); font-size: var(--t-subhead); }
+table.grid tr:hover td { background: var(--fill); }
+.num-cell { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }
+
+/* scroll containers never let the page scroll sideways */
+.xscroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* skeleton */
+@keyframes pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 0.85; } }
+.skeleton { background: var(--fill); border-radius: 8px; animation: pulse 1.4s ease-in-out infinite; }
+
+/* focus ring */
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+button { font-family: inherit; }
+a { color: inherit; text-decoration: none; }

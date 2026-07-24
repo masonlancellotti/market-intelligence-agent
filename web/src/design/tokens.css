@@ -1,0 +1,106 @@
+/* MERIDIAN design tokens — Apple design language 1:1 (PLAN.md §13.1).
+   Built FIRST, before any page. Light/dark via prefers-color-scheme + manual toggle. */
+
+:root {
+  /* Typography — SF via the system stack (this IS SF Pro on Apple devices) */
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Monaco, monospace;
+
+  /* HIG type scale (size / line-height) */
+  --t-large-title: 34px; --lh-large-title: 41px;
+  --t-title1: 28px; --lh-title1: 34px;
+  --t-title2: 22px; --lh-title2: 28px;
+  --t-title3: 20px; --lh-title3: 25px;
+  --t-headline: 17px; --lh-headline: 22px;
+  --t-body: 17px; --lh-body: 22px;
+  --t-callout: 16px; --lh-callout: 21px;
+  --t-subhead: 15px; --lh-subhead: 20px;
+  --t-footnote: 13px; --lh-footnote: 18px;
+  --t-caption1: 12px; --lh-caption1: 16px;
+  --t-caption2: 11px; --lh-caption2: 13px;
+
+  /* Radii & materials */
+  --radius-card: 12px;
+  --radius-hero: 16px;
+  --radius-pill: 980px;
+  --hairline: 0.5px;
+  --blur: 20px;
+
+  /* Motion */
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur: 320ms;
+
+  /* Apple system palette — LIGHT (default) */
+  --systemBackground: #ffffff;
+  --secondarySystemBackground: #f2f2f7;
+  --tertiarySystemBackground: #ffffff;
+  --groupedBackground: #f2f2f7;
+  --label: #000000;
+  --secondaryLabel: rgba(60, 60, 67, 0.6);
+  --tertiaryLabel: rgba(60, 60, 67, 0.3);
+  --separator: rgba(60, 60, 67, 0.36);
+  --fill: rgba(120, 120, 128, 0.12);
+  --blue: #007aff;
+  --green: #34c759;
+  --red: #ff3b30;
+  --orange: #ff9500;
+  --yellow: #ffcc00;
+  --teal: #30b0c7;
+  --indigo: #5856d6;
+  --purple: #af52de;
+  --gray: #8e8e93;
+  --card-shadow: 0 0 0 0.5px var(--separator), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --toolbar-bg: rgba(255, 255, 255, 0.72);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --systemBackground: #000000;
+    --secondarySystemBackground: #1c1c1e;
+    --tertiarySystemBackground: #2c2c2e;
+    --groupedBackground: #000000;
+    --label: #ffffff;
+    --secondaryLabel: rgba(235, 235, 245, 0.6);
+    --tertiaryLabel: rgba(235, 235, 245, 0.3);
+    --separator: rgba(84, 84, 88, 0.65);
+    --fill: rgba(120, 120, 128, 0.24);
+    --blue: #0a84ff;
+    --green: #30d158;
+    --red: #ff453a;
+    --orange: #ff9f0a;
+    --yellow: #ffd60a;
+    --teal: #40c8e0;
+    --indigo: #5e5ce6;
+    --purple: #bf5af2;
+    --gray: #8e8e93;
+    --card-shadow: none; /* no drop shadows in dark mode (§13.1) */
+    --toolbar-bg: rgba(28, 28, 30, 0.72);
+    color-scheme: dark;
+  }
+}
+
+/* Manual theme override wins in both directions (toggle stamps data-theme on <html>) */
+:root[data-theme="light"] {
+  --systemBackground: #ffffff; --secondarySystemBackground: #f2f2f7;
+  --tertiarySystemBackground: #ffffff; --groupedBackground: #f2f2f7;
+  --label: #000000; --secondaryLabel: rgba(60, 60, 67, 0.6);
+  --tertiaryLabel: rgba(60, 60, 67, 0.3); --separator: rgba(60, 60, 67, 0.36);
+  --fill: rgba(120, 120, 128, 0.12);
+  --blue: #007aff; --green: #34c759; --red: #ff3b30; --orange: #ff9500;
+  --yellow: #ffcc00; --teal: #30b0c7; --indigo: #5856d6; --purple: #af52de;
+  --card-shadow: 0 0 0 0.5px var(--separator), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --toolbar-bg: rgba(255, 255, 255, 0.72);
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --systemBackground: #000000; --secondarySystemBackground: #1c1c1e;
+  --tertiarySystemBackground: #2c2c2e; --groupedBackground: #000000;
+  --label: #ffffff; --secondaryLabel: rgba(235, 235, 245, 0.6);
+  --tertiaryLabel: rgba(235, 235, 245, 0.3); --separator: rgba(84, 84, 88, 0.65);
+  --fill: rgba(120, 120, 128, 0.24);
+  --blue: #0a84ff; --green: #30d158; --red: #ff453a; --orange: #ff9f0a;
+  --yellow: #ffd60a; --teal: #40c8e0; --indigo: #5e5ce6; --purple: #bf5af2;
+  --card-shadow: none; --toolbar-bg: rgba(28, 28, 30, 0.72);
+  color-scheme: dark;
+}
