@@ -1,0 +1,96 @@
+# Declarative alert rules. Evaluated on a q1min loop against the
+# latest signal snapshot. Each rule:
+#   id        unique slug (also the dedupe namespace)
+#   scope     ticker | tier name (holdings|active|monitor) | portfolio | macro | crypto-holdings
+#   priority  P0 | P1 | P2   (or a conditional expression string, e.g. "P0 if item_1_03 else P1")
+#   when      safe-eval boolean expression over named signal vars (see signals/rules.py VARS)
+#   msg       message template ({var} interpolation over the same vars + evidence)
+#   throttle  once_per_day | once_per_memo | once_per_bar | none
+#   cooldown  seconds before the same dedupe_key may fire again (default 3600)
+#
+# Thresholds are expressed in ATR / sigma units where sensible (adaptive, not fixed %).
+
+rules:
+  - id: holding-invalidation
+    scope: portfolio
+    priority: P0
+    when: "invalidation_crossed"
+    throttle: once_per_memo
+    cooldown: 0
+    msg: "{ticker} broke invalidation {invalidation_level} from memo #{memo_id} — plan: {exit_plan}"
+
+  - id: holding-gap
+    scope: holdings
+    priority: P0
+    when: "abs(premarket_gap_pct) >= 3"
+    throttle: once_per_day
+    msg: "{ticker} gapped {premarket_gap_pct:+.1f}% pre-market ({price})"
+
+  - id: watchlist-big-move
+    scope: active
+    priority: P1
+    when: "abs(day_change_pct) >= max(2.5, 2.5 * atr_pct) and volume_z >= 2"
+    cooldown: 14400
+    msg: "{ticker} {day_change_pct:+.1f}% on volume z={volume_z:.1f} ({price})"
+
+  - id: filing-8k-holding
+    scope: holdings
+    priority: "P0 if item_material else P1"
+    when: "new_8k"
+    throttle: none
+    msg: "8-K filed for {ticker}: items {item_codes}"
+
+  - id: insider-cluster
+    scope: active
+    priority: P1
+    when: "insider_cluster_buy"
+    cooldown: 86400
+    msg: "Insider cluster BUY in {ticker}: {insider_count} insiders / 14d"
+
+  - id: vix-spike
+    scope: macro
+    priority: P1
+    when: "vix_change_pct >= 15 or vix_crossed_25"
+    cooldown: 7200
+    msg: "VIX {vix} ({vix_change_pct:+.0f}%) — volatility spike"
+
+  - id: regime-flip
+    scope: macro
+    priority: P1
+    when: "regime_bucket_changed"
+    throttle: once_per_bar
+    msg: "Regime → {regime_bucket} ({regime_score}/100, was {regime_prev_bucket})"
+
+  - id: macro-surprise
+    scope: macro
+    priority: P0
+    when: "econ_high_importance and abs(surprise_score) >= 1.5"
+    msg: "{econ_name}: {econ_actual} vs {econ_consensus} consensus (surprise {surprise_score:+.1f}σ)"
+
+  - id: fed-odds-swing
+    scope: macro
+    priority: P1
+    when: "fed_odds_move_pts >= 15"
+    cooldown: 43200
+    msg: "Kalshi Fed-decision odds moved {fed_odds_move_pts:+.0f}pts in 24h → {fed_odds_yes}%"
+
+  - id: crypto-drawdown
+    scope: crypto-holdings
+    priority: P0
+    when: "day_change_pct <= -8"
+    cooldown: 21600
+    msg: "{ticker} {day_change_pct:.1f}% (24h) — {price}"
+
+  - id: golden-death-cross
+    scope: active
+    priority: P2
+    when: "cross_50_200 != 0"
+    throttle: once_per_day
+    msg: "{ticker} {cross_50_200_label} (50/200DMA)"
+
+  - id: 52w-breakout
+    scope: active
+    priority: P2
+    when: "close_above_52w_high and volume_z >= 1.5"
+    throttle: once_per_day
+    msg: "{ticker} 52-week high breakout ({price}, vol z={volume_z:.1f})"
