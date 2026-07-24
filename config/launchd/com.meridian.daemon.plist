@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- meridiand process lifecycle (PLAN.md §3). Install via scripts/install_launchd.sh,
+     which replaces __MERIDIAN_HOME__ with the real path. KeepAlive + RunAtLoad give us
+     crash-restart and boot-start; logs go to ~/Library/Logs/meridian/. -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.meridian.daemon</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>__MERIDIAN_HOME__/scripts/run_daemon.sh</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>MERIDIAN_HOME</key>
+        <string>__MERIDIAN_HOME__</string>
+        <key>MERIDIAN_PORT</key>
+        <string>8788</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+    <key>WorkingDirectory</key>
+    <string>__MERIDIAN_HOME__</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+    <key>StandardOutPath</key>
+    <string>__HOME__/Library/Logs/meridian/daemon.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>__HOME__/Library/Logs/meridian/daemon.err.log</string>
+    <key>ProcessType</key>
+    <string>Interactive</string>
+    <key>Nice</key>
+    <integer>0</integer>
+</dict>
+</plist>

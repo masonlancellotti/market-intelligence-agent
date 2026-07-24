@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Watchdog (PLAN.md §3): every 5 min curl /api/health; 3 strikes -> P0 via the
+     standalone notifier CLI, which works even when the daemon is down. -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.meridian.watchdog</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>__MERIDIAN_HOME__/scripts/watchdog.sh</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>MERIDIAN_HOME</key>
+        <string>__MERIDIAN_HOME__</string>
+        <key>MERIDIAN_PORT</key>
+        <string>8788</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+    <key>StartInterval</key>
+    <integer>300</integer>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>__HOME__/Library/Logs/meridian/watchdog.log</string>
+    <key>StandardErrorPath</key>
+    <string>__HOME__/Library/Logs/meridian/watchdog.log</string>
+</dict>
+</plist>
