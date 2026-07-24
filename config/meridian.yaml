@@ -1,0 +1,35 @@
+# MERIDIAN non-secret config. This is the file Mason edits most.
+# Secrets live in .env. Reload picked up on next config read / daemon restart.
+
+timezone: America/New_York
+
+watchlist:            # tiers drive cadence + agent attention
+  holdings: []        # auto-mirrors portfolio.yaml tickers
+  active: [NVDA, MSFT, AMZN, SPY, QQQ, TLT, GLD]
+  monitor: [SMH, XLE, XLF, IWM, EEM, UUP, BTC-USD, ETH-USD, SOL-USD]
+
+benchmarks: [SPY, QQQ, IWM, TLT, GLD, UUP, BTC-USD]
+sector_etfs: [XLK, XLF, XLE, XLV, XLY, XLP, XLI, XLU, XLB, XLRE, XLC]
+
+budgets:
+  llm_daily_usd: 3.00          # hard stop; Sunday allowed 2x
+  llm_monthly_usd: 60.00
+  sunday_multiplier: 2.0
+
+notifications:
+  quiet_hours: {start: "23:00", end: "07:00", override_priority: P0}
+
+briefs:
+  morning: {at: "07:45", audio: true}
+  midday:  {at: "12:30", conditional: true, min_materiality: 3}
+  closing: {at: "16:20"}
+  sunday:  {at: "17:00", model: opus}
+  crypto_weekend: {at: "Sat 10:00"}
+
+models:
+  triage:   claude-haiku-4-5-20251001
+  analyst:  claude-sonnet-5
+  composer: claude-sonnet-5
+  deep:     claude-opus-4-8
+
+redact_portfolio: false

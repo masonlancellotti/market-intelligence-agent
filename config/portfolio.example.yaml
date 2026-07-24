@@ -1,0 +1,14 @@
+# Copy to config/portfolio.yaml (gitignored) and fill in real positions.
+# Manual in v1 — the honest constraint: no brokerage API (PLAN.md §5).
+# Every position MAY link a memo_id; that's how invalidation-level P0 alerts
+# attach to real money (PLAN.md §8.4 / §11).
+
+accounts:
+  - name: brokerage
+    positions:
+      - {ticker: NVDA, qty: 40, cost_basis: 118.20, opened: 2025-11-03, memo_id: 12}
+  - name: crypto
+    positions:
+      - {ticker: BTC-USD, qty: 0.5, cost_basis: 61250, opened: 2025-06-14}
+
+cash: {brokerage_usd: 12000, stable_usd: 3000}

@@ -1,0 +1,24 @@
+# Core runtime — mirrors pyproject [project.dependencies].
+# Used for pip/venv on machines without uv (see docs/DECISIONS.md D-002).
+fastapi>=0.115
+uvicorn[standard]>=0.34
+apscheduler>=3.11,<4
+pydantic>=2.9
+pydantic-settings>=2.6
+httpx>=0.28
+tenacity>=9.0
+polars>=1.17
+duckdb>=1.1
+pyarrow>=18.0
+numpy>=2.0
+pandas>=2.2
+pandas-market-calendars>=4.4
+feedparser>=6.0
+pyyaml>=6.0
+python-dotenv>=1.0
+loguru>=0.7
+anthropic>=0.40
+sse-starlette>=2.1
+pytest>=8.3
+pytest-asyncio>=0.24
+ruff>=0.8

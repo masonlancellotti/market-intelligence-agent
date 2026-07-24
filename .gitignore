@@ -1,0 +1,38 @@
+# secrets & local config
+.env
+.env.*
+!.env.example
+config/portfolio.yaml
+
+# data — a small frozen demo snapshot IS committed (meridian.db + parquet/daily +
+# audio + cards) so the system boots keyless from a clean clone. Runtime churn and
+# regenerable artifacts stay out:
+data/backups/
+data/parquet/intraday/
+data/meridian.db-wal
+data/meridian.db-shm
+data/meridian.db-journal
+
+# python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# node / vite
+web/node_modules/
+web/dist/
+web/.vite/
+web/tsconfig.tsbuildinfo
+*.local
+
+# os / logs
+.DS_Store
+Thumbs.db
+*.log
+logs/
