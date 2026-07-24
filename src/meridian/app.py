@@ -136,6 +136,7 @@ def _mount_routers(app: FastAPI) -> None:
         ("meridian.api.filings", "/api", "filings"),
         ("meridian.api.briefs", "/api", "briefs"),
         ("meridian.api.memos", "/api", "conviction"),
+        ("meridian.api.lab", "/api", "lab"),
         ("meridian.api.feed", "", "feed"),
     ]:
         try:

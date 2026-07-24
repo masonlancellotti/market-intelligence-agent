@@ -1,0 +1,77 @@
+# Systematic rulebook for the Calibration Lab (V2).
+#
+# Each rule is an EX-ANTE, transparent hypothesis: "when <condition> held on day t,
+# the probability of <outcome> over the next <horizon> trading days is <probability>."
+# `manage.py backtest-rules` evaluates every rule over the backfilled keyless history,
+# resolves each firing from the realised SPY forward return, and Brier-scores it.
+#
+# These are ILLUSTRATIVE calibration probes over historical data, stored with
+# source='rule_backtest' and labelled RETROSPECTIVE in the UI. They are NOT trading
+# advice and carry no forward claim. Parameters are deliberately visible and editable.
+#
+# Features available to `when`:  regime, regime_bucket, breadth, spy_rsi, vix_pct
+# Consequent variable for `predict`:  spy_return  (SPY forward return over `horizon`)
+
+rules:
+  - id: regime_hot_meanrevert
+    when: "regime >= 70"
+    horizon: 5
+    predict: "spy_return < 0"
+    probability: 0.55
+    rationale: "Euphoric risk-on readings tend to give back some gains short-term."
+
+  - id: regime_cold_bounce
+    when: "regime <= 35"
+    horizon: 5
+    predict: "spy_return > 0"
+    probability: 0.58
+    rationale: "Deeply risk-off tapes have a short-term mean-reversion bias."
+
+  - id: regime_neutral_drift
+    when: "regime > 45 and regime < 65"
+    horizon: 20
+    predict: "spy_return > 0"
+    probability: 0.60
+    rationale: "Equity risk premium: a neutral tape drifts up over a month on average."
+
+  - id: rsi_oversold_bounce
+    when: "spy_rsi < 35"
+    horizon: 5
+    predict: "spy_return > 0"
+    probability: 0.58
+    rationale: "Short-term oversold SPY often bounces within a week."
+
+  - id: rsi_overbought_fade
+    when: "spy_rsi > 70"
+    horizon: 5
+    predict: "spy_return < 0"
+    probability: 0.52
+    rationale: "Overbought SPY has a weak short-term fade tendency."
+
+  - id: vix_spike_reversion
+    when: "vix_pct > 80"
+    horizon: 20
+    predict: "spy_return > 0"
+    probability: 0.62
+    rationale: "High VIX percentile (fear) precedes above-average 1-month recoveries."
+
+  - id: vix_calm_grind
+    when: "vix_pct < 30"
+    horizon: 20
+    predict: "spy_return > 0"
+    probability: 0.60
+    rationale: "Low-volatility regimes tend to grind higher (until they don't)."
+
+  - id: breadth_strong_momentum
+    when: "breadth > 65"
+    horizon: 20
+    predict: "spy_return > 0"
+    probability: 0.58
+    rationale: "Broad participation is a momentum tailwind over the next month."
+
+  - id: breadth_weak_caution
+    when: "breadth < 35"
+    horizon: 20
+    predict: "spy_return < 0"
+    probability: 0.50
+    rationale: "Narrow/weak breadth is a coin-flip-to-negative month (deliberately uncertain)."

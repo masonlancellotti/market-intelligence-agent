@@ -5,6 +5,9 @@
     python manage.py seed             # seed instruments from watchlist
     python manage.py health           # print health snapshot
     python manage.py backfill [TICKERS...]   # 5y daily history -> Parquet (Phase 1)
+    python manage.py refresh [--dry-run]     # live keyless pull (quotes/Kalshi/RSS/EDGAR) (V2)
+    python manage.py backfill-regime [--years N]  # recompute 2y composite regime (V2)
+    python manage.py backtest-rules   # Brier-score systematic rules over history (V2)
     python manage.py refresh-quotes   # pull latest quotes now (Phase 1)
     python manage.py ingest NAME      # run one connector now (Phase 1/2)
     python manage.py signals          # recompute indicators/breadth/regime (Phase 3)
@@ -70,6 +73,34 @@ def main(argv: list[str] | None = None) -> int:
         from meridian.connectors.history import backfill_all
 
         _print(backfill_all(rest or None))
+        return 0
+
+    if cmd == "refresh":
+        get_db(s).migrate()
+        from meridian.ops.refresh import format_summary, live_refresh
+
+        dry = "--dry-run" in rest
+        summary = live_refresh(dry_run=dry)
+        print(format_summary(summary))
+        return 0
+
+    if cmd == "backfill-regime":
+        get_db(s).migrate()
+        from meridian.signals.regime_history import backfill_regime
+
+        years = 2
+        if "--years" in rest:
+            i = rest.index("--years")
+            if i + 1 < len(rest):
+                years = int(rest[i + 1])
+        _print(backfill_regime(years=years))
+        return 0
+
+    if cmd == "backtest-rules":
+        get_db(s).migrate()
+        from meridian.conviction.rulebook import backtest_rules
+
+        _print(backtest_rules())
         return 0
 
     if cmd == "refresh-quotes":

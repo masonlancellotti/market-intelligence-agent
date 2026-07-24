@@ -34,6 +34,8 @@ def home(tmp_path, monkeypatch):
     (tmp_path / "config" / "meridian.yaml").write_text(TEST_YAML, encoding="utf-8")
     # real alert rules so the engine has something to evaluate
     shutil.copy(REPO / "config" / "alerts.yaml", tmp_path / "config" / "alerts.yaml")
+    # real systematic rulebook for the Calibration Lab backtest tests
+    shutil.copy(REPO / "config" / "rules.yaml", tmp_path / "config" / "rules.yaml")
     monkeypatch.setenv("MERIDIAN_HOME", str(tmp_path))
 
     from meridian.config import reload_settings

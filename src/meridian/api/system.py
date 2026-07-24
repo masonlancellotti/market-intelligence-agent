@@ -48,6 +48,14 @@ def info() -> dict:
     }
 
 
+@router.get("/system/freshness")
+def freshness() -> dict:
+    """Snapshot vs live freshness for the dashboard banner (V2)."""
+    from ..ops.refresh import refresh_status
+
+    return refresh_status()
+
+
 @router.get("/system/costs")
 def costs() -> dict:
     from ..ops.costs import cost_summary

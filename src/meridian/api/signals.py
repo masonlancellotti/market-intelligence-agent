@@ -36,6 +36,22 @@ def regime_history(days: int = 90) -> dict:
     return {"history": hist(days=days)}
 
 
+@router.get("/regime/history")
+def regime_backfill_history(limit: int = 600) -> dict:
+    """Backfilled ~2y daily composite regime (RETROSPECTIVE). Empty until backfill-regime runs."""
+    from ..signals.regime_history import history_rows
+
+    return {"history": history_rows(limit=limit), "retrospective": True}
+
+
+@router.get("/regime/forward-returns")
+def regime_forward_returns() -> dict:
+    """In-sample SPY forward-return distribution conditional on regime bucket."""
+    from ..signals.regime_history import forward_return_stats
+
+    return forward_return_stats()
+
+
 @router.get("/signals/alerts")
 def alerts(limit: int = 100) -> dict:
     db = get_db()
