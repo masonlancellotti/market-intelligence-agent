@@ -88,6 +88,7 @@ external data → connectors → SQLite/Parquet → signal engine → agent pipe
 ```bash
 python -m venv .venv
 .venv/Scripts/pip install -r requirements-core.txt          # POSIX: .venv/bin/pip ; or `uv sync`
+.venv/Scripts/pip install -r requirements.lock              # exact known-good pins (reproducible env)
 python manage.py migrate                                    # idempotent (the demo DB is pre-migrated)
 PYTHONPATH=src MERIDIAN_PORT=8788 .venv/Scripts/python -m meridian.app   # -> http://localhost:8788
 ```
