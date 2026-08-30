@@ -1,4 +1,5 @@
-# Meridian
+# Market Intelligence Agent
+n> Internally named `meridian` — the daemon entry point is `meridiand`, config keys are `MERIDIAN_*`.
 
 **A local-first market-intelligence daemon that enforces forecasting discipline.**
 
